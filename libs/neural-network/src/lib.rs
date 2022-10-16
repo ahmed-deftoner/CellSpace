@@ -1,3 +1,6 @@
+use rand::Rng;
+
+
 struct Neuron {
     weights: Vec<f32>,
     bias: f32
@@ -25,10 +28,11 @@ impl Neuron {
     } 
 
     pub fn random(output: usize) -> Self {
-        let bias = todo!();
+        let mut rng = rand::thread_rng();
+        let bias = rng.gen_range(-1.0..=1.0);
 
         let weights = (0..output)
-            .map(|_| todo!())
+            .map(|_| rng.gen_range(-1.0..=1.0))
             .collect();
         Self { weights, bias }
     }
