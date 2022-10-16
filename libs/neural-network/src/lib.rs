@@ -23,6 +23,15 @@ impl Neuron {
             .sum::<f32>();
         (self.bias + output).max(0.0)
     } 
+
+    pub fn random(output: usize) -> Self {
+        let bias = todo!();
+
+        let weights = (0..output)
+            .map(|_| todo!())
+            .collect();
+        Self { weights, bias }
+    }
 }
 
 impl Layer {
