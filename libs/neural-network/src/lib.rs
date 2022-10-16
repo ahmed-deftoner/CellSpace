@@ -11,8 +11,16 @@ pub struct Network {
     layers: Vec<Layer>
 }
 
-impl Network {
-    pub fn propagate(inputs: Vec<f32>) -> Vec<f32> {
+impl Layer {
+    fn propagate(&self, inputs: Vec<f32>) -> Vec<f32> {
         todo!()
+    } 
+}
+
+impl Network {
+    fn propagate(&self, inputs: Vec<f32>) -> Vec<f32> {
+        self.layers
+            .iter()
+            .fold(inputs, |inputs, layer| layer.propagate(inputs))
     }
 }
