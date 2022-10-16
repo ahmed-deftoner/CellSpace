@@ -32,6 +32,13 @@ impl Layer {
             .map(|neuron| neuron.propagate(&inputs))
             .collect()
     } 
+
+    pub fn random(input: usize, output: usize) -> Self {
+        let neurons = (0..output)
+            .map(|_| Neuron::random(input))
+            .collect();
+        Self { neurons }
+    }
 }
 
 impl Network {
@@ -41,20 +48,15 @@ impl Network {
             .fold(inputs, |inputs, layer| layer.propagate(inputs))
     }
     
-    pub fn random(layers: Vec<LayerTopology>) -> Self {
+    pub fn random(layers: &[LayerTopology]) -> Self {
         assert!(layers.len() > 1);
-        let mut built_layers = Vec::new();
+        let layers = layers
+            .windows(2)
+            .map(|layers| {
+                Layer::random(layers[0].neurons, layers[1].neurons)
+            })
+            .collect();
 
-        for i in 0..(layers.len() - 1) {
-            let input_neurons = layers[i].neurons;
-            let output_neurons = layers[i + 1].neurons;
-
-            built_layers.push(Layer::random(
-                input_neurons,
-                output_neurons,
-            ));
-        }
-
-        Self { layers: built_layers }
+        Self { layers }
     }
 }
