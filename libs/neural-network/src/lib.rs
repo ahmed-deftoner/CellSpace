@@ -13,7 +13,11 @@ pub struct Network {
 
 impl Neuron {
     fn propagate(&self, inputs: &[f32]) -> f32 {
-        todo!()
+        let output = inputs.iter()
+            .zip(&self.weights)
+            .map(|(input, weight)| input * weight)
+            .sum::<f32>();
+        (self.bias + output).max(0.0)
     } 
 }
 
