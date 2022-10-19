@@ -10,7 +10,6 @@ struct Layer {
     neurons: Vec<Neuron>
 }
 
-#[derive(Clone, Debug)]
 pub struct Network {
     layers: Vec<Layer>
 }
@@ -56,10 +55,6 @@ impl Layer {
 }
 
 impl Network {
-    crate fn new(layers: Vec<Layer>) -> Self {
-        Self { layers }
-    }
-
     fn propagate(&self, inputs: Vec<f32>) -> Vec<f32> {
         self.layers
             .iter()
@@ -74,7 +69,7 @@ impl Network {
             .map(|layers| Layer::random(rng, layers[0].neurons, layers[1].neurons))
             .collect();
 
-        Self::new(layers)
+        Self {layers}
     }
 }
 
