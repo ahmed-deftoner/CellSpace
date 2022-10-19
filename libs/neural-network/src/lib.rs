@@ -39,6 +39,16 @@ impl Neuron {
 }
 
 impl Layer {
+    pub fn new(neurons: Vec<Neuron>) -> Self {
+        assert!(!neurons.is_empty());
+
+        assert!(neurons
+            .iter()
+            .all(|neuron| neuron.weights.len() == neurons[0].weights.len()));
+
+        Self { neurons }
+    }
+    
     fn propagate(&self, inputs: Vec<f32>) -> Vec<f32> {
         self.neurons
             .iter()
@@ -120,4 +130,24 @@ mod test {
         }
     }
 
+    mod propagate {
+        use super::*;
+
+        #[test]
+        fn test() {
+            let layers = (
+                Layer::new(vec![
+                    Neuron::new(0.0, vec![-0.5, -0.4, -0.3]),
+                    Neuron::new(0.0, vec![-0.2, -0.1, 0.0]),
+                ]),
+                Layer::new(vec![Neuron::new(0.0, vec![-0.5, 0.5])]),
+            );
+            let network = Network::new(vec![layers.0.clone(), layers.1.clone()]);
+
+            let actual = network.propagate(vec![0.5, 0.6, 0.7]);
+            let expected = layers.1.propagate(layers.0.propagate(vec![0.5, 0.6, 0.7]));
+
+            approx::assert_relative_eq!(actual.as_slice(), expected.as_slice());
+        }
+    }
 }
